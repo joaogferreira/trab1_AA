@@ -8,18 +8,34 @@ def build_matrix(n_rows, n_cols):
     matrix = [[0 for x in range(n_cols+1)] for x in range(n_rows+1)]
     return matrix
 
-def fill_first_line(matrix,i, j):
+def fill_first_line(matrix,i,j):
+    if(j<len(matrix[i])):
+        if(i==0 and j==0):
+            #print('first')
+            matrix[i][j]=0
+            j+=1
+            return fill_first_line(matrix,i,j)
+        else:
+            matrix[i][j] = matrix[i][j-1] + gap
+            #print(i,j)
+            j+=1
+            return fill_first_line(matrix,i,j)
+    return matrix
+#
+# preencher restantes linhas
+#
+def fill_matrix(matrix,i, j):
     #i -> linha
     #j -> coluna
     if(i<len(matrix)):
         if(j<len(matrix[i])):
             print(i,j)
             j+=1
-            fill_first_line(matrix,i,j)
+            return fill_matrix(matrix,i,j)
         else:
             i+=1
             j=0
-            fill_first_line(matrix,i,j)
+            return fill_matrix(matrix,i,j)
     
 
     return matrix
@@ -28,7 +44,9 @@ def fill_first_line(matrix,i, j):
 def main(s1, s2, match, mismatch, gap):
     s1,s2 = s1.read().strip(), s2.read().strip()
     matrix = build_matrix(len(s2), len(s1))
-    fill_first_line(matrix, 0, 0) #queremos começar na posicao (0,0)
+    fill_first_line(matrix,0,0)
+    print(matrix)
+    #fill_matrix(matrix, 0, 0) #queremos começar na posicao (0,0)
     
     
 if __name__ == "__main__":
