@@ -1,0 +1,25 @@
+tenho q passar match, mismatch e gap , M[0][0]=0
+
+
+
+1)criar a matriz
+array de arrays 
+
+2)preencher a primeira linha e a primeira coluna
+para ser recursivo tenho de ter um current_i, current_j (i - linha e j - coluna)
+if(i==n_linhas) { break }
+if (j==n_colunas) { //go to next line }
+
+3)
+current_i e current_j outra vez 
+funcao que calcula o topo, esquerda e diagonal (FUNCAO PARA PREENCHER O RESTO DA MATRIZ)
+->calcular valores de numero da esquerda, de cima e da diagonal 
+-> determinar o max e meter na matriz
+-> avançar uma posicao 
+-> chamar outra vez a funcao
+-> ter um dicionario {M[3][4] , "d"} "d", "l", "t" diagonal, left, top (DE ONDE VEM)
+
+4)funcao para determinar o caminho (começando no elemento mais a direita)
+->este veio da esquerda, ou seja vamos para M[a][b] 
+->voltar a chamar a funcao com o M[a][b] seguinte ou seja para onde vai e assim sucessivamente 
+->no fim desta função ir guardando o caminho e as sequencias resultantes (final_s1 e final_s2)
