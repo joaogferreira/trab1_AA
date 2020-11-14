@@ -112,27 +112,24 @@ def find_path(matrix, i, j, new_s1, new_s2, path):
         diagonal = get_diagonal(matrix, i, j)
         max_value = max(top, left, diagonal)
         if max_value==top:
-            print("top")
             path.append("top")
             new_s1 = "-" + new_s1
             new_s2 = matrix[i][0] + new_s2
             i=i-1
-            find_path(matrix, i, j, new_s1, new_s2, path)
+            return find_path(matrix, i, j, new_s1, new_s2, path)
         elif max_value==left:
-            print("left")
             path.append("left")
             new_s1 = matrix[0][j] + new_s1
             new_s2 = "-" + new_s2
             j=j-1
-            find_path(matrix, i, j, new_s1, new_s2, path)
+            return find_path(matrix, i, j, new_s1, new_s2, path)
         elif max_value==diagonal:
-            print("diagonal")
             path.append("diagonal")
             new_s1 = matrix[0][j] + new_s1
             new_s2 = matrix[0][j] + new_s2
             j=j-1
             i= i-1 
-            find_path(matrix, i, j, new_s1, new_s2, path)
+            return find_path(matrix, i, j, new_s1, new_s2, path)
 
     return new_s1, new_s2, path
 
@@ -160,6 +157,7 @@ def main(s1, s2, match, mismatch, gap):
 
     print(new_s1)
     print(new_s2)
+    print(path)
 
     
     
