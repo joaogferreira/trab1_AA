@@ -8,7 +8,7 @@ def print_matrix(matrix):
         print(i)
 
 def build_matrix(n_rows, n_cols):
-    matrix = [[0 for x in range(n_cols+2)] for x in range(n_rows+2)]
+    matrix = [[0.0 for x in range(n_cols+2)] for x in range(n_rows+2)]
     return matrix
 
 #line
@@ -49,7 +49,7 @@ def fill_first_line(matrix,i,j):
     if(j<len(matrix[i])):
         if(i==1 and j==1):
             #print('first')
-            matrix[i][j]=0
+            matrix[i][j]=0.0
             j+=1
             return fill_first_line(matrix,i,j)
         else:
@@ -62,7 +62,7 @@ def fill_first_line(matrix,i,j):
 def fill_first_col(matrix, i, j):
     if(i<len(matrix)):
         if(i==1 and j==1):
-            matrix[i][j]=0
+            matrix[i][j]=0.0
             i+=1 
             return fill_first_col(matrix, i,j)
         else:
@@ -78,8 +78,13 @@ def get_left(matrix, i,j):
     return matrix[i][j-1] + gap 
 
 def get_diagonal(matrix, i, j):
-    #falta por as letras
-    pass
+    col_char = matrix[0][j]
+    line_char = matrix[i][0]
+
+    if col_char==line_char:
+        return matrix[i-1][j-1] + match
+    else:
+        return matrix[i-1][j-1] + mismatch
 
 #
 # preencher restantes linhas
@@ -89,12 +94,16 @@ def fill_matrix(matrix,i, j):
     #j -> coluna
     if(i<len(matrix)):
         if(j<len(matrix[i])):
-            print(i,j)
+            #print("pos: "+str(i)+" "+str(j))
+            #print("diagonal:"+str(get_diagonal(matrix,i,j)))
+            #print("top:"+str(get_top(matrix,i,j)))
+            #print("left:"+str(get_left(matrix,i,j)))
+            matrix[i][j] = max(get_top(matrix,i,j), get_diagonal(matrix, i, j), get_left(matrix,i,j))
             j+=1
             return fill_matrix(matrix,i,j)
         else:
             i+=1
-            j=0
+            j=2
             return fill_matrix(matrix,i,j)
     
     return matrix
@@ -102,13 +111,20 @@ def fill_matrix(matrix,i, j):
 
 def main(s1, s2, match, mismatch, gap):
     s1,s2 = s1.read().strip(), s2.read().strip()
+    
     matrix = build_matrix(len(s2), len(s1))
+    
     first_line_letter_to_matrix(matrix,0,0,s1,s2)
     first_col_letter_to_matrix(matrix, 0,0, s1,s2)
-    #fill_first_line(matrix,1,1)
-    #fill_first_col(matrix, 1,1)
+    
+    fill_first_line(matrix,1,1)
+    fill_first_col(matrix, 1,1)
+    
+    fill_matrix(matrix, 2, 2) #queremos começar na posicao (2,2), as duas primeiras linhas e colunas ja tao cheias
+
     print_matrix(matrix)
-    #fill_matrix(matrix, 1, 1) #queremos começar na posicao (1,1) uma vez que a primeira linha e a primeira coluna ja foram preen
+    
+    
     
     
 if __name__ == "__main__":
