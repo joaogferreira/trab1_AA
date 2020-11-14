@@ -9,7 +9,20 @@ def build_matrix(n_rows, n_cols):
     return matrix
 
 def fill_first_line(matrix,i, j):
-    pass
+    #i -> linha
+    #j -> coluna
+    if(i<len(matrix)):
+        if(j<len(matrix[i])):
+            print(i,j)
+            j+=1
+            fill_first_line(matrix,i,j)
+        else:
+            i+=1
+            j=0
+            fill_first_line(matrix,i,j)
+    
+
+    return matrix
     
 
 def main(s1, s2, match, mismatch, gap):
