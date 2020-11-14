@@ -3,14 +3,51 @@ import argparse
 import logging
 parser = argparse.ArgumentParser()
 
+def print_matrix(matrix):
+    for i in matrix:
+        print(i)
 
 def build_matrix(n_rows, n_cols):
-    matrix = [[0 for x in range(n_cols+1)] for x in range(n_rows+1)]
+    matrix = [[0 for x in range(n_cols+2)] for x in range(n_rows+2)]
+    return matrix
+
+#line
+def first_line_letter_to_matrix(matrix, i, j,s1,s2):
+    if(j<len(matrix[i])):
+        if(i==0 and j==0):
+            matrix[i][j]="-"
+            j+=1
+            return first_line_letter_to_matrix(matrix,i,j,s1,s2)
+        elif(j==1):
+            matrix[i][j]="-"
+            j+=1
+            return first_line_letter_to_matrix(matrix,i,j,s1,s2)
+        else:
+            matrix[i][j] = s1[j-2]
+            j+=1
+            return first_line_letter_to_matrix(matrix,i,j,s1,s2)
+    return matrix
+
+#col 
+def first_col_letter_to_matrix(matrix, i, j, s1, s2):
+    if(i<len(matrix)):
+        if(i==0 and j==0):
+            matrix[i][j]="-"
+            i+=1
+            return first_col_letter_to_matrix(matrix,i,j,s1,s2)
+        elif(i==1):
+            matrix[i][j]="-"
+            i+=1
+            return first_col_letter_to_matrix(matrix,i,j,s1,s2)
+        else:
+            matrix[i][j] = s2[i-2]
+            i+=1
+            return first_col_letter_to_matrix(matrix,i,j,s1,s2)
     return matrix
 
 def fill_first_line(matrix,i,j):
     if(j<len(matrix[i])):
-        if(i==0 and j==0):
+        if(i==1 and j==1):
             #print('first')
             matrix[i][j]=0
             j+=1
@@ -21,9 +58,32 @@ def fill_first_line(matrix,i,j):
             j+=1
             return fill_first_line(matrix,i,j)
     return matrix
+
+def fill_first_col(matrix, i, j):
+    if(i<len(matrix)):
+        if(i==1 and j==1):
+            matrix[i][j]=0
+            i+=1 
+            return fill_first_col(matrix, i,j)
+        else:
+            matrix[i][j] = matrix[i-1][j] + gap 
+            i+=1
+            return fill_first_col(matrix, i,j)
+    return matrix
+
+def get_top(matrix, i, j):
+    return matrix[i-1][j] + gap
+
+def get_left(matrix, i,j):
+    return matrix[i][j-1] + gap 
+
+def get_diagonal(matrix, i, j):
+    #falta por as letras
+    pass
+
 #
 # preencher restantes linhas
-#
+# ainda nao tou a chamar 
 def fill_matrix(matrix,i, j):
     #i -> linha
     #j -> coluna
@@ -37,16 +97,18 @@ def fill_matrix(matrix,i, j):
             j=0
             return fill_matrix(matrix,i,j)
     
-
     return matrix
     
 
 def main(s1, s2, match, mismatch, gap):
     s1,s2 = s1.read().strip(), s2.read().strip()
     matrix = build_matrix(len(s2), len(s1))
-    fill_first_line(matrix,0,0)
-    print(matrix)
-    #fill_matrix(matrix, 0, 0) #queremos começar na posicao (0,0)
+    first_line_letter_to_matrix(matrix,0,0,s1,s2)
+    first_col_letter_to_matrix(matrix, 0,0, s1,s2)
+    #fill_first_line(matrix,1,1)
+    #fill_first_col(matrix, 1,1)
+    print_matrix(matrix)
+    #fill_matrix(matrix, 1, 1) #queremos começar na posicao (1,1) uma vez que a primeira linha e a primeira coluna ja foram preen
     
     
 if __name__ == "__main__":
