@@ -68,8 +68,24 @@ def fill_matrix(matrix,i, j,s1,s2):
 
 def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
     if (i==0 and j==0):
+        #stop
         return new_s1, new_s2, path
-    else:
+    elif (i==0 and j!=0):
+        #so se pode ir para a esquerda
+        left = get_left(matrix, i,j)
+        path.append("left")
+        new_s1 = s1[j-1] + new_s1
+        new_s2 = "-" + new_s2
+        j=j-1
+        return find_path(matrix, i, j, s1, new_s1, s1, new_s2, path)
+    elif (i!=0 and j==0):
+        #so se pode ir para cima
+        path.append("top")
+        new_s1 = "-" + new_s1
+        new_s2 = s2[i-1] + new_s2
+        i=i-1
+        return find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
+    elif (i!=0 and j!=0):
         top = get_top(matrix, i, j)
         left = get_left(matrix, i, j)
         diagonal = get_diagonal(matrix, i, j,s1,s2)
