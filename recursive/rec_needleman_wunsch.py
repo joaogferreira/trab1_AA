@@ -8,10 +8,11 @@ def print_matrix(matrix):
         print(i)
 
 def build_matrix(n_rows, n_cols):
-    matrix = [[0.0 for x in range(n_cols+2)] for x in range(n_rows+2)]
+    matrix = [[0.0 for x in range(n_cols+1)] for x in range(n_rows+1)]
     return matrix
 
 #line
+'''
 def first_line_letter_to_matrix(matrix, i, j,s1,s2):
     if(j<len(matrix[i])):
         if(i==0 and j==0):
@@ -44,10 +45,11 @@ def first_col_letter_to_matrix(matrix, i, j, s1, s2):
             i+=1
             return first_col_letter_to_matrix(matrix,i,j,s1,s2)
     return matrix
+'''
 
 def fill_first_line(matrix,i,j):
     if(j<len(matrix[i])):
-        if(i==1 and j==1):
+        if(i==0 and j==0):
             matrix[i][j]=0.0
             j+=1
             return fill_first_line(matrix,i,j)
@@ -59,7 +61,7 @@ def fill_first_line(matrix,i,j):
 
 def fill_first_col(matrix, i, j):
     if(i<len(matrix)):
-        if(i==1 and j==1):
+        if(i==0 and j==0):
             matrix[i][j]=0.0
             i+=1 
             return fill_first_col(matrix, i,j)
@@ -75,9 +77,11 @@ def get_top(matrix, i, j):
 def get_left(matrix, i,j):
     return matrix[i][j-1] + gap 
 
-def get_diagonal(matrix, i, j):
-    col_char = matrix[0][j]
-    line_char = matrix[i][0]
+def get_diagonal(matrix, i, j,s1,s2):
+    #col_char = matrix[0][j]
+    #line_char = matrix[i][0]
+    col_char = s1[j-1]
+    line_char = s2[i-1]
 
     if col_char==line_char:
         return matrix[i-1][j-1] + match
@@ -86,50 +90,66 @@ def get_diagonal(matrix, i, j):
 
 #
 # preencher restantes linhas
-# ainda nao tou a chamar 
-def fill_matrix(matrix,i, j):
+#
+def fill_matrix(matrix,i, j,s1,s2):
     #i -> linha
     #j -> coluna
+    #print("->"+str(i)+","+str(j))
     if(i<len(matrix)):
         if(j<len(matrix[i])):
-            matrix[i][j] = max(get_top(matrix,i,j), get_diagonal(matrix, i, j), get_left(matrix,i,j))
+            matrix[i][j] = max(get_top(matrix,i,j), get_diagonal(matrix, i, j,s1,s2), get_left(matrix,i,j))
             j+=1
-            return fill_matrix(matrix,i,j)
+            return fill_matrix(matrix,i,j,s1,s2)
         else:
             i+=1
-            j=2
-            return fill_matrix(matrix,i,j)
+            j=1
+            return fill_matrix(matrix,i,j,s1,s2)
     
     return matrix
 
-def find_path(matrix, i, j, new_s1, new_s2, path):
-    #para na posicao (1,1)
-    if (i==1 and j==1):
+def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
+    #para na posicao (0,0)
+    #print(i,j)
+    #print("----")
+    if (i==0 and j==0):
         return new_s1, new_s2, path
     else:
         top = get_top(matrix, i, j)
         left = get_left(matrix, i, j)
-        diagonal = get_diagonal(matrix, i, j)
+        diagonal = get_diagonal(matrix, i, j,s1,s2)
         max_value = max(top, left, diagonal)
-        if max_value==top:
-            path.append("top")
-            new_s1 = "-" + new_s1
-            new_s2 = matrix[i][0] + new_s2
-            i=i-1
-            return find_path(matrix, i, j, new_s1, new_s2, path)
-        elif max_value==left:
-            path.append("left")
-            new_s1 = matrix[0][j] + new_s1
-            new_s2 = "-" + new_s2
-            j=j-1
-            return find_path(matrix, i, j, new_s1, new_s2, path)
-        elif max_value==diagonal:
+        #print(top, left, diagonal)
+        if max_value==diagonal:
+            #print("entrou_diag")
             path.append("diagonal")
-            new_s1 = matrix[0][j] + new_s1
-            new_s2 = matrix[0][j] + new_s2
+            #new_s1 = matrix[0][j] + new_s1
+            new_s1 = s1[j-1] + new_s1
+            #new_s2 = matrix[0][j] + new_s2
+            new_s2 = s2[i-1] + new_s2
+            #new_s2 = "@"+ new_s2
             j=j-1
             i= i-1 
-            return find_path(matrix, i, j, new_s1, new_s2, path)
+            return find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
+        elif max_value==left:
+            #print("entrou_left")
+            path.append("left")
+            #new_s1 = matrix[0][j] + new_s1
+            new_s1 = s1[j-1] + new_s1
+            new_s2 = "-" + new_s2
+            j=j-1
+            return find_path(matrix, i, j, s1, new_s1, s1, new_s2, path)
+
+        elif max_value==top:
+            #print("entrou_top")
+            path.append("top")
+            new_s1 = "-" + new_s1
+            #print(new_s1)
+            #new_s2 = matrix[i][0] + new_s2
+            new_s2 = s2[i-1] + new_s2
+            i=i-1
+            return find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
+        
+        
 
     return new_s1, new_s2, path
 
@@ -139,25 +159,21 @@ def main(s1, s2, match, mismatch, gap):
     
     matrix = build_matrix(len(s2), len(s1))
     
-    first_line_letter_to_matrix(matrix,0,0,s1,s2)
-    first_col_letter_to_matrix(matrix, 0,0, s1,s2)
+    fill_first_line(matrix,0,0)
+    fill_first_col(matrix, 0,0)
     
-    fill_first_line(matrix,1,1)
-    fill_first_col(matrix, 1,1)
-    
-    fill_matrix(matrix, 2, 2) #queremos começar na posicao (2,2), as duas primeiras linhas e colunas ja tao cheias
+    fill_matrix(matrix, 1, 1,s1,s2) #queremos começar na posicao (1,1), as duas primeiras linhas e colunas ja tao cheias
 
-    
-    
     #print_matrix(matrix)
 
     #path vai desde o ultimo elemento ate ao 1,1
     #len -1 para começar na ultima posicao 
-    new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, "", "", [])
+    #find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
+    new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
 
     print(new_s1)
     print(new_s2)
-    print(path)
+    #print(path)
 
     
     
