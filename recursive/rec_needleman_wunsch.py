@@ -6,7 +6,6 @@ import time
 
 parser = argparse.ArgumentParser()
 sys.setrecursionlimit(1000000)
-#faulthandler.enable()
 
 
 OPERATIONS_COUNT=0
@@ -24,56 +23,83 @@ def build_matrix(n_rows, n_cols):
 
 def fill_first_line(matrix,i,j):
     global OPERATIONS_COUNT
+    
     if(j<len(matrix[i])):
+        
         OPERATIONS_COUNT+=1
-        if(i==0 and j==0):
-            OPERATIONS_COUNT+=1
+        
+        if( i == 0 and j == 0):
+            OPERATIONS_COUNT += 1
+            
             matrix[i][j]=0.0
-            OPERATIONS_COUNT+=1
+            OPERATIONS_COUNT +=1
+            
             j+=1
             OPERATIONS_COUNT+=1
+            
             return fill_first_line(matrix,i,j)
+        
         else:
             matrix[i][j] = matrix[i][j-1] + gap
             OPERATIONS_COUNT+=1
+            
             j+=1
             OPERATIONS_COUNT+=1
+            
             return fill_first_line(matrix,i,j)
+    
     OPERATIONS_COUNT+=1
+    
     return matrix
 
 def fill_first_col(matrix, i, j):
     global OPERATIONS_COUNT
+    
     if(i<len(matrix)):
+        
         OPERATIONS_COUNT+=1
+        
         if(i==0 and j==0):
             matrix[i][j]=0.0
             OPERATIONS_COUNT+=1
+            
             i+=1
             OPERATIONS_COUNT+=1
+            
             return fill_first_col(matrix, i,j)
+        
         else:
+            matrix[i][j] = matrix[i-1][j] + gap
             OPERATIONS_COUNT+=1
-            matrix[i][j] = matrix[i-1][j] + gap 
+            
             i+=1
             OPERATIONS_COUNT+=1
+            
             return fill_first_col(matrix, i,j)
+    
     return matrix
 
 def get_top(matrix, i, j):
     global OPERATIONS_COUNT
+    
     OPERATIONS_COUNT+=1
+    
     return matrix[i-1][j] + gap
+
 
 def get_left(matrix, i,j):
     global OPERATIONS_COUNT
+    
     OPERATIONS_COUNT+=1
+    
     return matrix[i][j-1] + gap 
 
 def get_diagonal(matrix, i, j,s1,s2):
     global OPERATIONS_COUNT
+    
     col_char = s1[j-1]
     OPERATIONS_COUNT+=1
+    
     line_char = s2[i-1]
     OPERATIONS_COUNT+=1
 
@@ -87,99 +113,137 @@ def get_diagonal(matrix, i, j,s1,s2):
 
 def fill_matrix(matrix,i, j,s1,s2):
     global OPERATIONS_COUNT
+    
     if(i<len(matrix)):
+        
         OPERATIONS_COUNT+=1
+        
         if(j<len(matrix[i])):
             OPERATIONS_COUNT+=1
+            
             matrix[i][j] = max(get_top(matrix,i,j), get_diagonal(matrix, i, j,s1,s2), get_left(matrix,i,j))
             OPERATIONS_COUNT+=1
+            
             j+=1
             OPERATIONS_COUNT+=1
+            
             return fill_matrix(matrix,i,j,s1,s2)
+        
         else:
             i+=1
             OPERATIONS_COUNT+=1
+            
             j=1
             OPERATIONS_COUNT+=1
+            
             return fill_matrix(matrix,i,j,s1,s2)
     
     return matrix
 
 def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
     global OPERATIONS_COUNT
+    
     if (i==0 and j==0):
         OPERATIONS_COUNT+=1
-        #stop
         return new_s1, new_s2, path
+    
     elif (i==0 and j!=0):
-        #so se pode ir para a esquerda
         left = get_left(matrix, i,j)
         OPERATIONS_COUNT+=1
+        
         path.append("left")
         OPERATIONS_COUNT+=1
+        
         new_s1 = s1[j-1] + new_s1
         OPERATIONS_COUNT+=1
+        
         new_s2 = "-" + new_s2
         OPERATIONS_COUNT+=1
+        
         j=j-1
         OPERATIONS_COUNT+=1
+        
         return find_path(matrix, i, j, s1, new_s1, s1, new_s2, path)
+    
     elif (i!=0 and j==0):
-        #so se pode ir para cima
         path.append("top")
         OPERATIONS_COUNT+=1
+        
         new_s1 = "-" + new_s1
         OPERATIONS_COUNT+=1
+        
         new_s2 = s2[i-1] + new_s2
         OPERATIONS_COUNT+=1
+        
         i=i-1
         OPERATIONS_COUNT+=1
+        
         return find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
     elif (i!=0 and j!=0):
         top = get_top(matrix, i, j)
         OPERATIONS_COUNT+=1
+        
         left = get_left(matrix, i, j)
         OPERATIONS_COUNT+=1
+        
         diagonal = get_diagonal(matrix, i, j,s1,s2)
         OPERATIONS_COUNT+=1
+        
         max_value = max(top, left, diagonal)
         OPERATIONS_COUNT+=1
 
         if max_value==diagonal:
             OPERATIONS_COUNT+=1
+            
             path.append("diagonal")
             OPERATIONS_COUNT+=1
+            
             new_s1 = s1[j-1] + new_s1
             OPERATIONS_COUNT+=1
+            
             new_s2 = s2[i-1] + new_s2
             OPERATIONS_COUNT+=1
+            
             j=j-1
             OPERATIONS_COUNT+=1
+            
             i= i-1
             OPERATIONS_COUNT+=1 
+            
             return find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
+        
         elif max_value==left:
             OPERATIONS_COUNT+=1
+            
             path.append("left")
             OPERATIONS_COUNT+=1
+            
             new_s1 = s1[j-1] + new_s1
             OPERATIONS_COUNT+=1
+            
             new_s2 = "-" + new_s2
             OPERATIONS_COUNT+=1
+            
             j=j-1
             OPERATIONS_COUNT+=1
+            
             return find_path(matrix, i, j, s1, new_s1, s1, new_s2, path)
 
         elif max_value==top:
             OPERATIONS_COUNT+=1
             path.append("top")
+            
             OPERATIONS_COUNT+=1
             new_s1 = "-" + new_s1
+            
             OPERATIONS_COUNT+=1
             new_s2 = s2[i-1] + new_s2
+            
             OPERATIONS_COUNT+=1
             i=i-1
+            
             OPERATIONS_COUNT+=1
+            
             return find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
         
     return new_s1, new_s2, path
@@ -189,6 +253,7 @@ def main(s1, s2, match, mismatch, gap):
     start_time = time.time()
 
     global OPERATIONS_COUNT
+    
     s1,s2 = s1.read().strip(), s2.read().strip()
     OPERATIONS_COUNT+=2
     
@@ -197,6 +262,7 @@ def main(s1, s2, match, mismatch, gap):
     
     fill_first_line(matrix,0,0)
     OPERATIONS_COUNT+=1
+    
     fill_first_col(matrix, 0,0)
     OPERATIONS_COUNT+=1
     
