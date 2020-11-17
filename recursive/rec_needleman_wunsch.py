@@ -11,17 +11,29 @@ sys.setrecursionlimit(1000000)
 #OPERATIONS_COUNT=0
 
 def print_matrix(matrix):
+    ''' 
+    Prints the matrix 
+    '''
     for i in matrix:
         print(i)
 
 #Falta incrementar as #OPERATIONS_COUNT 
 #carina
 def build_matrix(n_rows, n_cols):
+    ''' 
+    Build matrix. All positions are equal to 0.0 
+    '''
     matrix = [[0.0 for x in range(n_cols+1)] for x in range(n_rows+1)]
     return matrix
 
 
 def fill_first_line(matrix,i,j):
+    '''
+    Fills first line of the matrix
+    Position (0,0) is equal to 0.0 
+    Positions (0,x) for x>=1 are equal to (0,x-1) + gap
+    '''
+    
     #global #OPERATIONS_COUNT
     
     if(j<len(matrix[i])):
@@ -53,6 +65,12 @@ def fill_first_line(matrix,i,j):
     return matrix
 
 def fill_first_col(matrix, i, j):
+    '''
+    Fills first column of the matrix
+    Position (0,0) is equal to 0.0 
+    Positions (0,x) for x>=1 are equal to (0,x-1) + gap
+    '''
+
     #global #OPERATIONS_COUNT
     
     if(i<len(matrix)):
@@ -80,6 +98,11 @@ def fill_first_col(matrix, i, j):
     return matrix
 
 def get_top(matrix, i, j):
+    '''
+    Calculates top
+    top is equal to the element above + gap 
+    '''
+
     #global #OPERATIONS_COUNT
     
     #OPERATIONS_COUNT+=1
@@ -88,6 +111,10 @@ def get_top(matrix, i, j):
 
 
 def get_left(matrix, i,j):
+    '''
+    Calculates left
+    left is equal to the element on the left + gap
+    '''
     #global #OPERATIONS_COUNT
     
     #OPERATIONS_COUNT+=1
@@ -95,6 +122,13 @@ def get_left(matrix, i,j):
     return matrix[i][j-1] + gap 
 
 def get_diagonal(matrix, i, j,s1,s2):
+    '''
+    Calculates diagonal 
+    if the char in position (current_line, 0) is equal to the char in position (0, current_column) 
+    the diagonal is equal to the value in the position (current_line - 1, current_column - 1) + match
+    Otherwise, the value of diagonal is equal to value in the position (current_line - 1, current_column - 1) + mismatch)
+    '''
+
     #global #OPERATIONS_COUNT
     
     col_char = s1[j-1]
@@ -112,6 +146,11 @@ def get_diagonal(matrix, i, j,s1,s2):
 
 
 def fill_matrix(matrix,i, j,s1,s2):
+    ''' 
+    iterates over the matrix 
+    the value to write in current position must be the greatest value between top, left and diagonal 
+    '''
+
     #global #OPERATIONS_COUNT
     
     if(i<len(matrix)):
@@ -141,6 +180,12 @@ def fill_matrix(matrix,i, j,s1,s2):
     return matrix
 
 def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
+    '''
+    finds path
+    starts at last position in the matrix 
+    stops in position (0,0)
+    '''
+
     #global #OPERATIONS_COUNT
     
     if (i==0 and j==0):
@@ -148,8 +193,7 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
         return new_s1, new_s2, path
     
     elif (i==0 and j!=0):
-        left = get_left(matrix, i,j)
-        #OPERATIONS_COUNT+=1
+        #the only path available goes to left position, so we know it came from left (first line)
         
         path.append("left")
         #OPERATIONS_COUNT+=1
@@ -166,6 +210,8 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
         return find_path(matrix, i, j, s1, new_s1, s1, new_s2, path)
     
     elif (i!=0 and j==0):
+        #the only path available goes to top position, so we know it came from top (first column) 
+
         path.append("top")
         #OPERATIONS_COUNT+=1
         
@@ -180,6 +226,10 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
         
         return find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
     elif (i!=0 and j!=0):
+        '''
+        path available: top, left, diagonal
+        we need to calculate all 3 values and the greatest is where it came from        
+        '''
         top = get_top(matrix, i, j)
         #OPERATIONS_COUNT+=1
         
@@ -283,8 +333,8 @@ def main(s1, s2, match, mismatch, gap):
     #print("Número de operações: "+str(OPERATIONS_COUNT))
     
     print("Tempo de execução: %s segundos" % (time.time() - start_time))
-    print("Tamanho s1: "+str(len(s1)))
-    print("Tamanho s2: "+str(len(s2)))
+    print("Tamanho original s1: "+str(len(s1)))
+    print("Tamanho original s2: "+str(len(s2)))
     
     
     
