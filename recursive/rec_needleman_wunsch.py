@@ -17,8 +17,6 @@ def print_matrix(matrix):
     for i in matrix:
         print(i)
 
-#Falta incrementar as #OPERATIONS_COUNT 
-#carina
 def build_matrix(n_rows, n_cols):
     ''' 
     Build matrix. All positions are equal to 0.0 
