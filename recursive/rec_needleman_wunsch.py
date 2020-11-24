@@ -151,13 +151,13 @@ def fill_matrix(matrix,i, j,s1,s2):
 
     #global #OPERATIONS_COUNT
     
+    
     if(i<len(matrix)):
-        
         #OPERATIONS_COUNT+=1
         
         if(j<len(matrix[i])):
             #OPERATIONS_COUNT+=1
-            
+
             matrix[i][j] = max(get_top(matrix,i,j), get_diagonal(matrix, i, j,s1,s2), get_left(matrix,i,j))
             #OPERATIONS_COUNT+=1
             
@@ -249,7 +249,7 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
             new_s1 = s1[j-1] + new_s1
             #OPERATIONS_COUNT+=1
             
-            new_s2 = s2[i-1] + new_s2
+            new_s2 = s1[j-1] + new_s2
             #OPERATIONS_COUNT+=1
             
             j=j-1
@@ -308,21 +308,24 @@ def main(s1, s2, match, mismatch, gap):
     matrix = build_matrix(len(s2), len(s1))
     #OPERATIONS_COUNT+=1
     
+
     fill_first_line(matrix,0,0)
     #OPERATIONS_COUNT+=1
     
     fill_first_col(matrix, 0,0)
     #OPERATIONS_COUNT+=1
+
+   
     
     fill_matrix(matrix, 1, 1,s1,s2)
     #OPERATIONS_COUNT+=1
 
     #print_matrix(matrix)
-
-    new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
+    
+    #new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
     #OPERATIONS_COUNT+=1
 
-
+    '''
     print("Sequências alinhadas:")
     print("Sequência 1: "+new_s1)
     print("Sequência 2: "+new_s2)
@@ -333,7 +336,7 @@ def main(s1, s2, match, mismatch, gap):
     print("Execution time: %s segundos" % (time.time() - start_time))
     print("s1 length: %s characters" % str(len(s1)))
     print("s2 length: %s characters" % str(len(s2)))
-    
+    '''
     
     
     
