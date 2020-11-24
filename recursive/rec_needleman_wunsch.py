@@ -322,14 +322,14 @@ def main(s1, s2, match, mismatch, gap):
 
     #print_matrix(matrix)
     
-    #new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
+    new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
     #OPERATIONS_COUNT+=1
 
-    '''
     print("Sequências alinhadas:")
     print("Sequência 1: "+new_s1)
     print("Sequência 2: "+new_s2)
     
+    '''
     #print(path)
     #print("Número de operações: "+str(OPERATIONS_COUNT))
     
