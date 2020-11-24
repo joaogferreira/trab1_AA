@@ -330,16 +330,16 @@ def main(s1, s2, match, mismatch, gap):
     #print(path)
     #print("Número de operações: "+str(OPERATIONS_COUNT))
     
-    print("Tempo de execução: %s segundos" % (time.time() - start_time))
-    print("Tamanho original s1: "+str(len(s1)))
-    print("Tamanho original s2: "+str(len(s2)))
+    print("Execution time: %s segundos" % (time.time() - start_time))
+    print("s1 length: %s characters" % str(len(s1)))
+    print("s2 length: %s characters" % str(len(s2)))
     
     
     
     
 if __name__ == "__main__":
-    parser.add_argument("-s1", "--sequence1", help="File with sequence 1", required=True)
-    parser.add_argument("-s2", "--sequence2", help="File with sequence 2", required=True)
+    parser.add_argument("-s1", "--sequence1_file", help="File with sequence 1", required=True)
+    parser.add_argument("-s2", "--sequence2_file", help="File with sequence 2", required=True)
     parser.add_argument("-m", "--match", help="Match Parameter",required=True)
     parser.add_argument("-mm", "--mismatch", help="Mismatch Parameter")
     parser.add_argument("-g", "--gap", help="Gap Penalty Parameter")
@@ -350,12 +350,12 @@ if __name__ == "__main__":
     Verify if files exist
     '''
     try: 
-        s1 = open(args.sequence1)
-        s2 = open(args.sequence2)
+        s1 = open(args.sequence1_file)
+        s2 = open(args.sequence2_file)
     except FileNotFoundError:
         logging.error("File not found.")
         sys.exit(1)
-    s1, s2 = open(args.sequence1), open(args.sequence2)
+    s1, s2 = open(args.sequence1_file), open(args.sequence2_file)
     
     '''
     Parameters : Match, Mismatch and Gap penalty
@@ -368,6 +368,7 @@ if __name__ == "__main__":
         logging.warning("Usage: python rec_needleman_wunsch.py -s1 <file1> -s2 <file2> -m <match> -mm <mismatch> -g <gap_penalty>")
         logging.error("Match, mismatch and gap_penalty must be numbers.")
         sys.exit(1)
+    
     match, mismatch, gap = float(args.match), float(args.mismatch), float(args.gap)
     
     main(s1,s2, match, mismatch, gap)
