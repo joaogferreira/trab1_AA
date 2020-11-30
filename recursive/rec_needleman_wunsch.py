@@ -242,7 +242,7 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
 
         if max_value==diagonal:
             #OPERATIONS_COUNT+=1
-            
+
             path.append("diagonal")
             #OPERATIONS_COUNT+=1
             

@@ -7,6 +7,7 @@ import time
 parser = argparse.ArgumentParser()
 sys.setrecursionlimit(1000000)
 
+directions = {}
 
 def print_matrix(matrix):
     ''' 
@@ -122,13 +123,19 @@ def fill_matrix(matrix,i, j,s1,s2):
 
             matrix[i][j] = max(get_top(matrix,i,j), get_diagonal(matrix, i, j,s1,s2), get_left(matrix,i,j))
             
+            if(matrix[i][j]==get_diagonal(matrix,i,j,s1,s2)):
+                directions[str(i)+","+str(j)]="diagonal"
+            elif(matrix[i][j]==get_left(matrix,i,j)):
+                directions[str(i)+","+str(j)]="left"
+            elif(matrix[i][j]==get_top(matrix,i,j)):
+                directions[str(i)+","+str(j)]="top"
+        
             j+=1
             
             return fill_matrix(matrix,i,j,s1,s2)
         
         else:
             i+=1
-            
             j=1
 
             return fill_matrix(matrix,i,j,s1,s2)
@@ -146,7 +153,6 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
         return new_s1, new_s2, path
     
     elif (i==0 and j!=0):
-        
         path.append("left")
         
         new_s1 = s1[j-1] + new_s1
@@ -173,17 +179,9 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
         path available: top, left, diagonal
         we need to calculate all 3 values and the greatest is where it came from        
         '''
-        top = get_top(matrix, i, j)
+        direction = directions[str(i)+","+str(j)]
 
-        left = get_left(matrix, i, j)
-        
-        diagonal = get_diagonal(matrix, i, j,s1,s2)
-
-        
-        max_value = max(top, left, diagonal)
-
-
-        if max_value==diagonal:
+        if direction=="diagonal":
       
             path.append("diagonal")
 
@@ -198,8 +196,8 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
             
             return find_path(matrix, i, j, s1, new_s1, s2, new_s2, path)
         
-        elif max_value==left:
-            
+        elif direction=="left":
+    
             path.append("left")
             
             new_s1 = s1[j-1] + new_s1
@@ -210,7 +208,7 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
             
             return find_path(matrix, i, j, s1, new_s1, s1, new_s2, path)
 
-        elif max_value==top:
+        elif direction=="top":
             path.append("top")
             
             new_s1 = "-" + new_s1
@@ -225,12 +223,9 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
 
 
 def main(s1, s2, match, mismatch, gap):
-    start_time = time.time()
-
     s1,s2 = s1.read().strip(), s2.read().strip()
 
     matrix = build_matrix(len(s2), len(s1))
-
 
     fill_first_line(matrix,0,0)
     
@@ -239,11 +234,11 @@ def main(s1, s2, match, mismatch, gap):
    
     fill_matrix(matrix, 1, 1,s1,s2)
 
-
+    #print(directions)
     #print_matrix(matrix)
     
     new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
-
+    
     print("Sequências alinhadas:")
     print("Sequência 1: "+new_s1)
     print("Sequência 2: "+new_s2)
