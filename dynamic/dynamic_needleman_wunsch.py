@@ -6,7 +6,33 @@ def score(x,y,i,j):
         return -1 #mismatch
 
 def find_path(matrix, m, n):
-    pass
+    if m==0 and n==0:
+        return path
+    if m==0 and n!=0:
+        path.append("left")
+        return find_path(matrix[:m+1][:n],m,n-1)
+    elif m!=0 and n==0:
+        path.append("top")
+        return find_path(matrix[:m][:n+1],m-1,n)
+    
+    
+    left = matrix[m][n-1] - 1 #pos anterior + gap
+    diagonal = matrix[m-1][n-1] + score(x,y, m-1, n-1) 
+    top = matrix[m-1][n] - 1  #pos anterior + gap 
+
+    choice = max(left, diagonal, top)
+    
+    if choice==left:
+        path.append("left")
+        return find_path(matrix[:m+1][:n],m,n-1)
+    elif choice==diagonal:
+        path.append("diagonal")
+        return find_path(matrix[:m][:n],m-1,n-1)
+    elif choice==top:
+        path.append("top")
+        return find_path(matrix[:m][:n+1],m-1,n)
+        
+
 
 def alignment(x,y):
     n = len(x)
@@ -25,9 +51,14 @@ def alignment(x,y):
             for j in range(1, n+1):
                 matrix[i][j] = max(matrix[i-1][j-1] + score(x,y,i-1,j-1),  matrix[i-1][j]-1, matrix[i][j-1]-1) #diagonal (align), top (delete), left (insert)
 
-    for line in matrix:
-        print(line)
+
+    path = find_path(matrix, m, n)
+
+    print(path)
+
 if __name__=='__main__':
+    path = [] 
+
     #ler de um ficheiro
     x = 'gtat'
     y = 'tagg'
