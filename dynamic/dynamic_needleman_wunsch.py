@@ -52,10 +52,28 @@ def alignment(x,y):
                 matrix[i][j] = max(matrix[i-1][j-1] + score(x,y,i-1,j-1),  matrix[i-1][j]-1, matrix[i][j-1]-1) #diagonal (align), top (delete), left (insert)
 
 
-    path = find_path(matrix, m, n)[::-1]
+    path = find_path(matrix, m, n)#[::-1]
 
     #print(path)
+    new_s1 = ""
+    new_s2 = ""
 
+    for dir in path:
+        if(dir=="diagonal"):
+            new_s1 = x[m-1]+new_s1
+            new_s2 = x[m-1]+new_s2
+            m-=1
+            n-=1
+        elif(dir=="top"):
+            new_s1 = "-"+new_s1
+            new_s2 = y[n-1]+new_s2
+        elif(dir=="left"):
+            new_s1 = x[m-1]+new_s1
+            new_s2 = "-"+new_s2
+            n-=1
+
+    print(new_s1)
+    print(new_s2)
 if __name__=='__main__':
     path = [] 
 
