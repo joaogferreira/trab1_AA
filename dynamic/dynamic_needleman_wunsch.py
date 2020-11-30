@@ -22,12 +22,12 @@ def find_path(matrix, m, n):
 
     choice = max(left, diagonal, top)
     
-    if choice==left:
-        path.append("left")
-        return find_path(matrix[:m+1][:n],m,n-1)
-    elif choice==diagonal:
+    if choice==diagonal:
         path.append("diagonal")
         return find_path(matrix[:m][:n],m-1,n-1)
+    elif choice==left:
+        path.append("left")
+        return find_path(matrix[:m+1][:n],m,n-1)
     elif choice==top:
         path.append("top")
         return find_path(matrix[:m][:n+1],m-1,n)
@@ -52,23 +52,24 @@ def alignment(x,y):
                 matrix[i][j] = max(matrix[i-1][j-1] + score(x,y,i-1,j-1),  matrix[i-1][j]-1, matrix[i][j-1]-1) #diagonal (align), top (delete), left (insert)
 
 
-    path = find_path(matrix, m, n)#[::-1]
+    path = find_path(matrix, m, n)
 
-    #print(path)
     new_s1 = ""
     new_s2 = ""
 
+    #primeira new_s1 ta bem
     for dir in path:
         if(dir=="diagonal"):
-            new_s1 = x[m-1]+new_s1
-            new_s2 = x[m-1]+new_s2
+            new_s1 = x[n-1]+new_s1
+            new_s2 = x[n-1]+new_s2
             m-=1
             n-=1
         elif(dir=="top"):
             new_s1 = "-"+new_s1
-            new_s2 = y[n-1]+new_s2
+            new_s2 = y[m-1]+new_s2
+            m-=1
         elif(dir=="left"):
-            new_s1 = x[m-1]+new_s1
+            new_s1 = x[n-1]+new_s1
             new_s2 = "-"+new_s2
             n-=1
 
@@ -78,7 +79,7 @@ if __name__=='__main__':
     path = [] 
 
     #ler de um ficheiro
-    x = 'gtat'
-    y = 'tagg'
+    x = 'gtataatgatg'
+    y = 'tagga'
 
     alignment(x,y)
