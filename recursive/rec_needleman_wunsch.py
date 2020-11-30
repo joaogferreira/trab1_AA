@@ -320,7 +320,7 @@ def main(s1, s2, match, mismatch, gap):
     fill_matrix(matrix, 1, 1,s1,s2)
     #OPERATIONS_COUNT+=1
 
-    #print_matrix(matrix)
+    print_matrix(matrix)
     
     new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
     #OPERATIONS_COUNT+=1
