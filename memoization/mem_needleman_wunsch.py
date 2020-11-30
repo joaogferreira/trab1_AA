@@ -177,15 +177,15 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
     elif (i!=0 and j!=0):
         '''
         path available: top, left, diagonal
-        we need to calculate all 3 values and the greatest is where it came from        
+        the difference to recursive without memoization is that we don't need to calculate the values from diagonal, left and top again
+        we get them from the dictionary that stored those values     
         '''
         direction = directions[str(i)+","+str(j)]
 
         if direction=="diagonal":
-      
-            path.append("diagonal")
 
-            
+            path.append("diagonal")
+     
             new_s1 = s1[j-1] + new_s1
             
             new_s2 = s1[j-1] + new_s2
@@ -223,6 +223,8 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
 
 
 def main(s1, s2, match, mismatch, gap):
+    start_time = time.time()
+
     s1,s2 = s1.read().strip(), s2.read().strip()
 
     matrix = build_matrix(len(s2), len(s1))
@@ -233,24 +235,17 @@ def main(s1, s2, match, mismatch, gap):
 
    
     fill_matrix(matrix, 1, 1,s1,s2)
-
-    #print(directions)
-    #print_matrix(matrix)
-    
+  
     new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
     
     print("Sequências alinhadas:")
     print("Sequência 1: "+new_s1)
     print("Sequência 2: "+new_s2)
     
-    '''
-    #print(path)
-    #print("Número de operações: "+str(OPERATIONS_COUNT))
-    
     print("Execution time: %s segundos" % (time.time() - start_time))
     print("s1 length: %s characters" % str(len(s1)))
     print("s2 length: %s characters" % str(len(s2)))
-    '''
+    
     
     
     
