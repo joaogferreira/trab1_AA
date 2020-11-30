@@ -57,7 +57,6 @@ def alignment(x,y):
     new_s1 = ""
     new_s2 = ""
 
-    #primeira new_s1 ta bem
     for dir in path:
         if(dir=="diagonal"):
             new_s1 = x[n-1]+new_s1
@@ -73,13 +72,15 @@ def alignment(x,y):
             new_s2 = "-"+new_s2
             n-=1
 
+    #falta comentarios e prints
     print(new_s1)
     print(new_s2)
+    
 if __name__=='__main__':
     path = [] 
 
     #ler de um ficheiro
     x = 'gtataatgatg'
-    y = 'tagga'
+    y = 'ta'
 
     alignment(x,y)
