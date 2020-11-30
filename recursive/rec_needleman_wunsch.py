@@ -367,6 +367,9 @@ if __name__ == "__main__":
         float(args.match)
         float(args.mismatch)
         float(args.gap)
+        if(float(args.gap)>0):
+            logging.error("Gap must be less than or equal to 0")
+            sys.exit(1)
     except ValueError as e:
         logging.warning("Usage: python rec_needleman_wunsch.py -s1 <file1> -s2 <file2> -m <match> -mm <mismatch> -g <gap_penalty>")
         logging.error("Match, mismatch and gap_penalty must be numbers.")
