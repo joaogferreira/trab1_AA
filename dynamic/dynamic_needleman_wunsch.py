@@ -10,36 +10,36 @@ sys.setrecursionlimit(1000000)
 
 def score(x,y,i,j,match, mismatch):
     if(x[j]==y[i]):
-        return 1 #match
+        return match
     else:
-        return -1 #mismatch
+        return mismatch
 
-def find_path(matrix, m, n):
+def find_path(matrix, m, n,match, mismatch, gap):
     if m==0 and n==0:
         return path
     if m==0 and n!=0:
         path.append("left")
-        return find_path(matrix[:m+1][:n],m,n-1)
+        return find_path(matrix[:m+1][:n],m,n-1,match,mismatch,gap)
     elif m!=0 and n==0:
         path.append("top")
-        return find_path(matrix[:m][:n+1],m-1,n)
+        return find_path(matrix[:m][:n+1],m-1,n,match,mismatch,gap)
     
-
-    left = matrix[m][n-1] - 1 #pos anterior + gap
+    left = matrix[m][n-1] + gap #pos anterior + gap
     diagonal = matrix[m-1][n-1] + score(x,y, m-1, n-1,match,mismatch) 
-    top = matrix[m-1][n] - 1  #pos anterior + gap 
+    top = matrix[m-1][n] + gap  #pos anterior + gap 
 
     choice = max(left, diagonal, top)
     
     if choice==diagonal:
         path.append("diagonal")
-        return find_path(matrix[:m][:n],m-1,n-1)
+        #print(len(matrix[:m][:n]))
+        return find_path(matrix[:m][:n],m-1,n-1,match,mismatch,gap)
     elif choice==left:
         path.append("left")
-        return find_path(matrix[:m+1][:n],m,n-1)
+        return find_path(matrix[:m+1][:n],m,n-1,match,mismatch,gap)
     elif choice==top:
         path.append("top")
-        return find_path(matrix[:m][:n+1],m-1,n)
+        return find_path(matrix[:m][:n+1],m-1,n,match,mismatch,gap)
         
 
 
@@ -61,7 +61,7 @@ def alignment(x,y,match,mismatch,gap):
                 matrix[i][j] = max(matrix[i-1][j-1] + score(x,y,i-1,j-1,match,mismatch),  matrix[i-1][j]-1, matrix[i][j-1]-1)
 
 
-    path = find_path(matrix, m, n)
+    path = find_path(matrix, m, n,match,mismatch,gap)
 
     new_s1 = ""
     new_s2 = ""
@@ -105,7 +105,8 @@ if __name__=='__main__':
         sys.exit(1)
     x, y = open(args.sequence1_file).read().strip(), open(args.sequence2_file).read().strip()
 
-    
+    #rint(len(x),len(y))
+
     try:
         float(args.match)
         float(args.mismatch)
