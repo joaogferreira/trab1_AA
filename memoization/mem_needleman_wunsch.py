@@ -188,7 +188,7 @@ def find_path(matrix, i, j, s1, new_s1, s2, new_s2, path):
      
             new_s1 = s1[j-1] + new_s1
             
-            new_s2 = s1[j-1] + new_s2
+            new_s2 = s2[i-1] + new_s2
             
             j=j-1
             

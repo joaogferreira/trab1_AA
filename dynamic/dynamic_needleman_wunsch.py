@@ -32,10 +32,8 @@ def find_path(matrix, m, n,match, mismatch, gap):
     
     if choice==diagonal:
         path.append("diagonal")
-        #print(len(matrix[:m][:n]))
         return find_path(matrix,m-1,n-1,match,mismatch,gap)
     elif choice==left:
-        print("aqui2")
         path.append("left")
         return find_path(matrix,m,n-1,match,mismatch,gap)
     elif choice==top:
@@ -51,7 +49,7 @@ def alignment(x,y,match,mismatch,gap):
     matrix = [ [0.0 for i in range(n+1)] for j in range(m+1)]
 
     for i in range(1, m+1):
-        matrix[i][0] = matrix[i-1][0] + gap #pos anterior + gap       #m -> linhas , n -> colunas
+        matrix[i][0] = matrix[i-1][0] + gap #pos anterior + gap
     
     for j in range(1, n+1):
         matrix[0][j] = matrix[0][j-1] + gap #pos anterior + gap
@@ -69,7 +67,7 @@ def alignment(x,y,match,mismatch,gap):
     for dir in path:
         if(dir=="diagonal"):
             new_s1 = x[n-1]+new_s1
-            new_s2 = x[n-1]+new_s2
+            new_s2 = y[m-1]+new_s2
             m-=1
             n-=1
         
