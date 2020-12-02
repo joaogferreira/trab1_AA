@@ -7,6 +7,7 @@ import time
 parser = argparse.ArgumentParser()
 sys.setrecursionlimit(1000000)
 
+OPERATIONS_COUNT=0
 
 def score(x,y,i,j,match, mismatch):
     '''
@@ -24,8 +25,9 @@ def find_path(matrix, m, n,match, mismatch, gap):
     '''
     Get path from matrix 
     '''
-
+    global OPERATIONS_COUNT
     #stops when we reach the first position of the matrix (0,0)    
+    OPERATIONS_COUNT+=1
     if m==0 and n==0:
         return path
     
@@ -33,6 +35,7 @@ def find_path(matrix, m, n,match, mismatch, gap):
     if m==0 (first line of the matrix) we can only go to the left position (diagonal and top positions do not exist)
     if n==0 (first column of the matrix) we can oly go to the top position (diagonal and left positions do not exist)
     '''
+    OPERATIONS_COUNT+=1
     if m==0 and n!=0:
         path.append("left")
         return find_path(matrix[:m+1][:n],m,n-1,match,mismatch,gap)
@@ -44,12 +47,15 @@ def find_path(matrix, m, n,match, mismatch, gap):
     all other cases 
     we must calculate left, diagonal and top values
     '''
+    OPERATIONS_COUNT+=4 # get top, diagonal, left values + score function call
     left = matrix[m][n-1] + gap #pos anterior + gap
     diagonal = matrix[m-1][n-1] + score(x,y, m-1, n-1,match,mismatch) 
     top = matrix[m-1][n] + gap  #pos anterior + gap 
 
+    OPERATIONS_COUNT+=1 # get max value
     choice = max(left, diagonal, top)
     
+    OPERATIONS_COUNT+=2 # evaluate choice and append to path
     if choice==diagonal:
         path.append("diagonal")
         # go to diagonal position (m,n) -> (m-1,n-1)
@@ -67,19 +73,28 @@ def find_path(matrix, m, n,match, mismatch, gap):
 def alignment(x,y,match,mismatch,gap):
     start_time = time.time()
 
+    global OPERATIONS_COUNT
+
+    OPERATIONS_COUNT+=2
     n = len(x)
     m = len(y)
 
     #fill matrix with 0's
+    OPERATIONS_COUNT+=1
     matrix = [ [0.0 for i in range(n+1)] for j in range(m+1)]
 
+    #fill firt columns
+    OPERATIONS_COUNT+=m+1
     for i in range(1, m+1):
         matrix[i][0] = matrix[i-1][0] + gap #previous position + gap
     
+    #fill first line
+    OPERATIONS_COUNT+=n+1
     for j in range(1, n+1):
         matrix[0][j] = matrix[0][j-1] + gap #previous position + gap
     
     #fill matrix with max values (diagonal + match/mismatch, left+gap, top+gap)
+    OPERATIONS_COUNT+=(m+1)*(n+1)
     for i in range(1,m+1):
         for j in range(1, n+1):
             matrix[i][j] = max(matrix[i-1][j-1] + score(x,y,i-1,j-1,match,mismatch),  matrix[i-1][j]+gap, matrix[i][j-1]+gap)
@@ -97,6 +112,7 @@ def alignment(x,y,match,mismatch,gap):
     if direction equals left we add a character to the first sequence and a "-" to the second sequence and go the left position (n-=1)
     '''
     for dir in path:
+        OPERATIONS_COUNT+=3
         if(dir=="diagonal"):
             new_s1 = x[n-1]+new_s1
             new_s2 = y[m-1]+new_s2
@@ -117,6 +133,7 @@ def alignment(x,y,match,mismatch,gap):
     print("Sequence 1: "+new_s1)
     print("Sequence 2: "+new_s2)
     print("Path: "+ str(path))
+    print("Operations count: "+str(OPERATIONS_COUNT))
     print("Execution time: %s seconds" % (time.time() - start_time))
     print("Sequence 1 length: %s characters" % str(len(x)))
     print("Sequence 2 length: %s characters" % str(len(y)))
