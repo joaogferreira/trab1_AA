@@ -319,8 +319,6 @@ def main(s1, s2, match, mismatch, gap):
     
     fill_matrix(matrix, 1, 1,s1,s2)
     #OPERATIONS_COUNT+=1
-
-    print_matrix(matrix)
     
     new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
     #OPERATIONS_COUNT+=1
@@ -328,13 +326,11 @@ def main(s1, s2, match, mismatch, gap):
     print("Sequências alinhadas:")
     print("Sequência 1: "+new_s1)
     print("Sequência 2: "+new_s2)
-    
-
+    print("Path: "+str(path))
     #print("Número de operações: "+str(OPERATIONS_COUNT))
-    
-    print("Execution time: %s segundos" % (time.time() - start_time))
-    print("s1 length: %s characters" % str(len(s1)))
-    print("s2 length: %s characters" % str(len(s2)))
+    print("Execution time: %s seconds" % (time.time() - start_time))
+    print("Sequence 1 length: %s characters" % str(len(s1)))
+    print("Sequence 2 length: %s characters" % str(len(s2)))
     
     
     

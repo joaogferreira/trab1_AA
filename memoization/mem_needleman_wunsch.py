@@ -128,6 +128,7 @@ def fill_matrix(matrix,i, j,s1,s2):
             Save the direction from each cell 
             Key : (i,j) 
             Value: "diagonal" / "left" / "top"
+            This is the main difference to the recursive without memoization algorithm
             '''
             if(matrix[i][j]==get_diagonal(matrix,i,j,s1,s2)):
                 directions[str(i)+","+str(j)]="diagonal"
@@ -242,14 +243,12 @@ def main(s1, s2, match, mismatch, gap):
    
     fill_matrix(matrix, 1, 1,s1,s2)
 
-    print_matrix(matrix)
-  
     new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
     
     print("Aligned Sequences:")
     print("Sequence 1: "+new_s1)
     print("Sequence 2: "+new_s2)
-    print("Path: "+path)
+    print("Path: "+ str(path))
     print("Execution time: %s seconds" % (time.time() - start_time))
     print("Sequence 1 length: %s characters" % str(len(s1)))
     print("Sequence 2 length: %s characters" % str(len(s2)))
