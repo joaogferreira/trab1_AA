@@ -7,6 +7,7 @@ import time
 parser = argparse.ArgumentParser()
 sys.setrecursionlimit(1000000)
 
+#Dictionary to save directions from each position of the matrix
 directions = {}
 
 def print_matrix(matrix):
@@ -123,6 +124,11 @@ def fill_matrix(matrix,i, j,s1,s2):
 
             matrix[i][j] = max(get_top(matrix,i,j), get_diagonal(matrix, i, j,s1,s2), get_left(matrix,i,j))
             
+            '''
+            Save the direction from each cell 
+            Key : (i,j) 
+            Value: "diagonal" / "left" / "top"
+            '''
             if(matrix[i][j]==get_diagonal(matrix,i,j,s1,s2)):
                 directions[str(i)+","+str(j)]="diagonal"
             elif(matrix[i][j]==get_left(matrix,i,j)):
@@ -240,13 +246,13 @@ def main(s1, s2, match, mismatch, gap):
   
     new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
     
-    print("Sequências alinhadas:")
-    print("Sequência 1: "+new_s1)
-    print("Sequência 2: "+new_s2)
-    
-    print("Execution time: %s segundos" % (time.time() - start_time))
-    print("s1 length: %s characters" % str(len(s1)))
-    print("s2 length: %s characters" % str(len(s2)))
+    print("Aligned Sequences:")
+    print("Sequence 1: "+new_s1)
+    print("Sequence 2: "+new_s2)
+    print("Path: "+path)
+    print("Execution time: %s seconds" % (time.time() - start_time))
+    print("Sequence 1 length: %s characters" % str(len(s1)))
+    print("Sequence 2 length: %s characters" % str(len(s2)))
     
     
     
