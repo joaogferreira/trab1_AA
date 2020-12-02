@@ -14,7 +14,7 @@ def score(x,y,i,j,match, mismatch):
     else:
         return mismatch
 
-def find_path(matrix, m, n,match, mismatch, gap):
+def find_path(matrix, m, n,match, mismatch, gap):    
     if m==0 and n==0:
         return path
     if m==0 and n!=0:
@@ -33,38 +33,38 @@ def find_path(matrix, m, n,match, mismatch, gap):
     if choice==diagonal:
         path.append("diagonal")
         #print(len(matrix[:m][:n]))
-        return find_path(matrix[:m][:n],m-1,n-1,match,mismatch,gap)
+        return find_path(matrix,m-1,n-1,match,mismatch,gap)
     elif choice==left:
+        print("aqui2")
         path.append("left")
-        return find_path(matrix[:m+1][:n],m,n-1,match,mismatch,gap)
+        return find_path(matrix,m,n-1,match,mismatch,gap)
     elif choice==top:
         path.append("top")
-        return find_path(matrix[:m][:n+1],m-1,n,match,mismatch,gap)
-        
-
+        return find_path(matrix,m-1,n,match,mismatch,gap)
+    
 
 def alignment(x,y,match,mismatch,gap):
     n = len(x)
     m = len(y)
 
     #fill matrix with 0's
-    matrix = [ [0 for i in range(n+1)] for j in range(m+1)]
+    matrix = [ [0.0 for i in range(n+1)] for j in range(m+1)]
 
     for i in range(1, m+1):
-        matrix[i][0] = matrix[i-1][0] + gap #pos anterior + gap 
-
+        matrix[i][0] = matrix[i-1][0] + gap #pos anterior + gap       #m -> linhas , n -> colunas
+    
     for j in range(1, n+1):
         matrix[0][j] = matrix[0][j-1] + gap #pos anterior + gap
+        
+    for i in range(1,m+1):
+        for j in range(1, n+1):
+            matrix[i][j] = max(matrix[i-1][j-1] + score(x,y,i-1,j-1,match,mismatch),  matrix[i-1][j]-1, matrix[i][j-1]-1)
     
-        for i in range(1,m+1):
-            for j in range(1, n+1):
-                matrix[i][j] = max(matrix[i-1][j-1] + score(x,y,i-1,j-1,match,mismatch),  matrix[i-1][j]-1, matrix[i][j-1]-1)
-
-
     path = find_path(matrix, m, n,match,mismatch,gap)
 
     new_s1 = ""
     new_s2 = ""
+
 
     for dir in path:
         if(dir=="diagonal"):
@@ -72,10 +72,12 @@ def alignment(x,y,match,mismatch,gap):
             new_s2 = x[n-1]+new_s2
             m-=1
             n-=1
+        
         elif(dir=="top"):
             new_s1 = "-"+new_s1
             new_s2 = y[m-1]+new_s2
             m-=1
+        
         elif(dir=="left"):
             new_s1 = x[n-1]+new_s1
             new_s2 = "-"+new_s2
@@ -85,6 +87,7 @@ def alignment(x,y,match,mismatch,gap):
     print(new_s1)
     print(new_s2)
     
+
 if __name__=='__main__':
     parser.add_argument("-s1", "--sequence1_file", help="File with sequence 1", required=True)
     parser.add_argument("-s2", "--sequence2_file", help="File with sequence 2", required=True)
@@ -105,7 +108,6 @@ if __name__=='__main__':
         sys.exit(1)
     x, y = open(args.sequence1_file).read().strip(), open(args.sequence2_file).read().strip()
 
-    #rint(len(x),len(y))
 
     try:
         float(args.match)
