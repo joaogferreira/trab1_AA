@@ -3,6 +3,7 @@ import argparse
 import logging
 import faulthandler
 import time
+import writeRec
 
 parser = argparse.ArgumentParser()
 sys.setrecursionlimit(1000000)
@@ -326,9 +327,13 @@ def main(s1, s2, match, mismatch, gap):
     print("Sequência 2: "+new_s2)
     print("Path: "+str(path))
     print("Operations count: "+str(OPERATIONS_COUNT))
-    print("Execution time: %s seconds" % (time.time() - start_time))
+    end = time.time()-start_time
+    print("Execution time: %s seconds" % (end))
     print("Sequence 1 length: %s characters" % str(len(s1)))
     print("Sequence 2 length: %s characters" % str(len(s2)))
+
+    writeRec.write(args.sequence1_file,args.sequence2_file,OPERATIONS_COUNT,end)
+
     
     
     
