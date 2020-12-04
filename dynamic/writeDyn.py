@@ -12,7 +12,3 @@ def write(seq1,seq2,n,time):
         
         #falta ir por a cruz no ficheiro
         writer.writerow([seq1,seq2,n,time])
-
-
-#h = "../seqs/seq1.txt"
-#f = open(h).read()
