@@ -130,15 +130,16 @@ def alignment(x,y,match,mismatch,gap):
             new_s2 = "-"+new_s2
             n-=1
 
-    print("Aligned Sequences:")
-    print("Sequence 1: "+new_s1)
-    print("Sequence 2: "+new_s2)
-    print("Path: "+ str(path))
+    
+    #print("Path: "+ str(path))
     print("Operations count: "+str(OPERATIONS_COUNT))
     end = time.time() - start_time
     print("Execution time: %s seconds" % (end))
-    print("Sequence 1 length: %s characters" % str(len(x)))
-    print("Sequence 2 length: %s characters" % str(len(y)))
+    print("Aligned Sequences:")
+    print("Sequence 1: "+new_s1)
+    print("Sequence 2: "+new_s2)
+    #print("Sequence 1 length: %s characters" % str(len(x)))
+    #print("Sequence 2 length: %s characters" % str(len(y)))
 
     writeDyn.write(args.sequence1_file, args.sequence2_file, OPERATIONS_COUNT, end)
     

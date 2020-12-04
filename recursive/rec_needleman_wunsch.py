@@ -322,15 +322,16 @@ def main(s1, s2, match, mismatch, gap):
     new_s1, new_s2, path = find_path(matrix, len(matrix)-1, len(matrix[0])-1, s1, "", s2,  "", [])
     OPERATIONS_COUNT+=1
 
-    print("Sequências alinhadas: ")
-    print("Sequência 1: "+new_s1)
-    print("Sequência 2: "+new_s2)
-    print("Path: "+str(path))
+    
+    #print("Path: "+str(path))
     print("Operations count: "+str(OPERATIONS_COUNT))
     end = time.time()-start_time
     print("Execution time: %s seconds" % (end))
-    print("Sequence 1 length: %s characters" % str(len(s1)))
-    print("Sequence 2 length: %s characters" % str(len(s2)))
+    print("Sequências alinhadas: ")
+    print("Sequência 1: "+new_s1)
+    print("Sequência 2: "+new_s2)
+    #print("Sequence 1 length: %s characters" % str(len(s1)))
+    #print("Sequence 2 length: %s characters" % str(len(s2)))
 
     writeRec.write(args.sequence1_file,args.sequence2_file,OPERATIONS_COUNT,end)
 

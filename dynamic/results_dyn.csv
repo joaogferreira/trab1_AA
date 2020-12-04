@@ -65,3 +65,5 @@ seq1,seq2,n_operations,time
 ../seqs/seq10.txt,../seqs/seq11.txt,33220,0.014911174774169922
 ../seqs/seq10.txt,../seqs/seq12.txt,33204,0.01360774040222168
 ../seqs/seq11.txt,../seqs/seq12.txt,43618,0.0177609920501709
+seq_grande1.txt,seq_grande2.txt,103530077,51.21110963821411
+../seqs/seq7.txt,../seqs/seq8.txt,11811,0.004490852355957031
